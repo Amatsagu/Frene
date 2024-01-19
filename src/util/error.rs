@@ -1,6 +1,5 @@
 use std::fmt;
 
-
 pub enum FreneError {
     ImageError(image::ImageError),
     IOError(std::io::Error)
