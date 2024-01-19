@@ -2,15 +2,18 @@ use termcolor::{Color, ColorSpec, StandardStream, WriteColor};
 use std::io::Write;
 use crate::util;
 
-pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength: Option<f32>) -> Result<(), util::error::FreneError> {
-    stdout.set_color(&mut ColorSpec::new().set_fg(Some(Color::Green)).set_bold(true))?;
+pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength: Option<u8>) -> Result<(), util::error::FreneError> {
+    let mut base_color = ColorSpec::new();
+    let reset_color = ColorSpec::new();
+    let green_color = &mut base_color.set_fg(Some(Color::Green)).set_bold(true);
+    stdout.set_color(&green_color)?;
     write!(stdout, "   Reading & Analyzing ")?;
-    stdout.set_color(&mut ColorSpec::new())?;
+    stdout.set_color(&reset_color)?;
     writeln!(stdout, "{}", file_path)?;
 
     let start = std::time::Instant::now();
     let img = image::open(file_path)?;
-    let power = strength.unwrap_or(5.0);
+    let power = strength.unwrap_or(5);
     let output = String::from("./blur-result.png");
 
     let width = img.width() as usize;
@@ -31,14 +34,14 @@ pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength
         }
     }
 
-    util::gaussian_blur(&mut data_new, width as usize, height as usize, power);
+    util::gaussian_blur(&mut data_new, width as usize, height as usize, power as f32);
     image::save_buffer(&output, &data_new.into_iter().flatten().collect::<Vec<u8>>(), width as u32, height as u32, image::ColorType::Rgb8)?;
 
     let duration = start.elapsed();
 
-    stdout.set_color(&mut ColorSpec::new().set_fg(Some(Color::Green)).set_bold(true))?;
+    stdout.set_color(green_color)?;
     write!(stdout, "    Finished ")?;
-    stdout.set_color(&mut ColorSpec::new())?;
+    stdout.set_color(&reset_color)?;
     writeln!(stdout, "created file \"{}\" in {:.2}s", output, duration.as_secs_f32())?;
     Ok(())
 }
