@@ -9,8 +9,8 @@ fn main() -> Result<(), std::io::Error> {
     let mut stdout = StandardStream::stdout(ColorChoice::Always);
 
     match cli.command {
-        cli::Commands::Blur { file_path } => command::blur_cmd_handler(&mut stdout, file_path),
-        cli::Commands::Scheme { file_path } => command::scheme_cmd_handler(&mut stdout, file_path),
+        cli::Commands::Blur { file_path } => command::blur_cmd_handler(&mut stdout, file_path)?,
+        cli::Commands::Scheme { file_path } => command::scheme_cmd_handler(&mut stdout, file_path)?,
     }
 
     stdout.set_color(&mut ColorSpec::new())?;
