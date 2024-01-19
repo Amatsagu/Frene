@@ -14,7 +14,7 @@ pub enum Commands {
     #[clap(arg_required_else_help = true)]
     Blur {
         file_path: String,
-        strength: Option<f32>
+        strength: Option<u8>
     },
     /// Analyze png/jpg image and create color-scheme based on most used colors in image
     #[clap(arg_required_else_help = true)]
