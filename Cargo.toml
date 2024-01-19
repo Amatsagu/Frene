@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Amatsagu", "SkaneroOo"]
 license = "MIT"
-description = "A small, utility tool to help you generate color-schemes & blur your background on the fly."
+description = "A small, utility tool to help you generate color-schemes & blur your background images on the fly."
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+strip = true
+lto = true
 
 [dependencies]
+clap = { version = "4.4.18", features = ["derive"] }
 termcolor = "1.4.1"
