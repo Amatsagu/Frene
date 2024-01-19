@@ -1,7 +1,7 @@
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use crate::util;
 
-pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength: f32) -> Result<(), image::ImageError> {
+pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength: f32) -> Result<(), util::error::FreneError> {
 
     let img = image::open(file_path)?;
 
@@ -24,7 +24,7 @@ pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength
     }
 
     util::gaussian_blur(&mut data_new, width as usize, height as usize, strength);
-    image::save_buffer("./test.png", data_new, width, height, image::ColorType::Rgb8)?;
+    image::save_buffer("./test.png", &data_new.into_iter().flatten().collect::<Vec<u8>>(), width as u32, height as u32, image::ColorType::Rgb8)?;
 
     Ok(())
 }
