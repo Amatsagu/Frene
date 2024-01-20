@@ -6,8 +6,14 @@ Compared to the imagemagick/convert based blurring - this is A LOT faster since 
 use std::cmp::min;
 
 pub fn gaussian_blur(data: &mut Vec<[u8; 3]>, width: usize, height: usize, blur_radius: f32) {
-    let boxes = create_box_gauss(blur_radius, 3);
+    // left for the future, when we might give options to choose number of passes
+    // for now, we decoded to hardcode values for 3 passes
+    // let boxes = create_box_gauss(blur_radius, n);
+    let boxes = [(blur_radius * 2.0 + 1.0) as i32; 3];
+
     let mut backbuf = data.clone();
+    println!("{:?}", boxes);
+
 
     for box_size in boxes.iter() {
         let radius = ((box_size - 1) / 2) as usize;
