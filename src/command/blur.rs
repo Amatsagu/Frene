@@ -3,9 +3,10 @@ use std::io::Write;
 use crate::util;
 
 pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength: Option<u8>) -> Result<(), util::error::FreneError> {
-    let mut base_color = ColorSpec::new();
+    let mut green_color = ColorSpec::new();
+    green_color.set_fg(Some(Color::Green));
+    green_color.set_bold(true);
     let reset_color = ColorSpec::new();
-    let green_color = &mut base_color.set_fg(Some(Color::Green)).set_bold(true);
     stdout.set_color(&green_color)?;
     write!(stdout, "   Reading & Analyzing ")?;
     stdout.set_color(&reset_color)?;
@@ -39,7 +40,7 @@ pub fn blur_cmd_handler(stdout: &mut StandardStream, file_path: String, strength
 
     let duration = start.elapsed();
 
-    stdout.set_color(green_color)?;
+    stdout.set_color(&green_color)?;
     write!(stdout, "    Finished ")?;
     stdout.set_color(&reset_color)?;
     writeln!(stdout, "created file \"{}\" in {:.2}s", output, duration.as_secs_f32())?;
